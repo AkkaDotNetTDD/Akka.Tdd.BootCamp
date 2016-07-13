@@ -22,7 +22,7 @@ namespace AkkaDotNetTDD.Tests
             //Arrange
             var container = new ContainerBuilder().Build();
             var system = new ApplicationActorSystem();
-            system.Register(new AutoFacAkkaDependencyResolver(container));
+            system.RegisterAndCreateActorSystem(new AutoFacAkkaDependencyResolver(container));
             var factory = new TddTestKitfactoryFactory(container, system.ActorSystem);
 
             var messageReceived = false;
@@ -35,11 +35,7 @@ namespace AkkaDotNetTDD.Tests
             emailSenderActor.Tell("hello");
 
             //Assert
-            factory.AwaitAssert(() =>
-            {
-                Assert.IsTrue(messageReceived);
-                return true;
-            },3000);
+            factory.AwaitAssert(() => Assert.IsTrue(messageReceived));
         }
         [TestMethod]
         public void introducing_email_service()
@@ -58,7 +54,7 @@ namespace AkkaDotNetTDD.Tests
             builder.Register(b => emailService);
             var container = builder.Build();
             var system = new ApplicationActorSystem();
-            system.Register(new AutoFacAkkaDependencyResolver(container));
+            system.RegisterAndCreateActorSystem(new AutoFacAkkaDependencyResolver(container));
             var factory = new TddTestKitfactoryFactory(container, system.ActorSystem);
 
             
@@ -72,11 +68,7 @@ namespace AkkaDotNetTDD.Tests
             emailSenderActor.Tell("hello");
 
             //Assert
-            factory.AwaitAssert(() =>
-            {
-                A.CallTo(() => emailService.SendEmail(emailMessage)).MustHaveHappened();
-                return true;
-            }, 3000);
+            factory.AwaitAssert(() => A.CallTo(() => emailService.SendEmail(emailMessage)).MustHaveHappened());
         }
 
 
@@ -105,7 +97,7 @@ namespace AkkaDotNetTDD.Tests
             builder.Register(b => emailService);
             var container = builder.Build();
             var system = new ApplicationActorSystem();
-            system.Register(new AutoFacAkkaDependencyResolver(container));
+            system.RegisterAndCreateActorSystem(new AutoFacAkkaDependencyResolver(container));
             var factory = new TddTestKitfactoryFactory(container, system.ActorSystem);
 
             //Act
@@ -113,13 +105,31 @@ namespace AkkaDotNetTDD.Tests
             emailSenderActor.Tell("hello");
 
             //Assert
-            factory.AwaitAssert(() =>
-            {
-                A.CallTo(() => emailService.SendEmail(emailMessage)).WithAnyArguments().MustHaveHappened();
-                return true;
-            }, 3000);
+            factory.AwaitAssert(() => A.CallTo(() => emailService.SendEmail(emailMessage)).WithAnyArguments().MustHaveHappened());
         }
 
-       
+        //using new api from testkit - getting message received inside inline actor
+        [TestMethod]
+        public void basic_actor_test2()
+        {
+            //Arrange
+            const string messageString = "hello";
+            var container = new ContainerBuilder().Build();
+            var system = new ApplicationActorSystem();
+            system.RegisterAndCreateActorSystem(new AutoFacAkkaDependencyResolver(container));
+            var factory = new TddTestKitfactoryFactory(container, system.ActorSystem);
+
+            var messageReceived = "";
+            var emailSenderActor = factory.WhenActorReceives<string>().ItShouldDo(actor =>
+            {
+                messageReceived = actor.MessageReceived.ToString();
+            }).CreateMockActorRef<MockActor>();
+
+            //Act
+            emailSenderActor.Tell(messageString);
+
+            //Assert
+            factory.AwaitAssert(() => Assert.AreEqual(messageString,messageReceived));
+        }
     }
 }

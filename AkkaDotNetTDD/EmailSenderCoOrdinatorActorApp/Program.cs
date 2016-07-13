@@ -24,7 +24,7 @@ namespace EmailSenderCoOrdinatorActorApp
             builder.Register<IDisplayService>(b => new ConsoleDisplayService());
             var container = builder.Build();
             var system = new ApplicationActorSystem();
-            system.Register(new AutoFacAkkaDependencyResolver(container));
+            system.RegisterAndCreateActorSystem(new AutoFacAkkaDependencyResolver(container));
             var emailSenderActorCoOrdinator = system.ActorSystem.CreateActor<EmailSenderActorCoOrdinator<EmailSenderActor>>();
             while (true)
             {

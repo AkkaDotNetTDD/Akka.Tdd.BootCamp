@@ -36,7 +36,7 @@ namespace AkkaDotNetTDD.Tests
             builder.Register(b => emailService);
             var container = builder.Build();
             var system = new ApplicationActorSystem();
-            system.Register(new AutoFacAkkaDependencyResolver(container));
+            system.RegisterAndCreateActorSystem(new AutoFacAkkaDependencyResolver(container));
             var factory = new TddTestKitfactoryFactory(container, system.ActorSystem);
 
             factory.WhenActorStarts()
@@ -56,11 +56,7 @@ namespace AkkaDotNetTDD.Tests
             emailSenderCorordinatorActor.Tell("hello");
 
             //Assert
-            factory.AwaitAssert(() =>
-            {
-                A.CallTo(() => emailService.SendEmail(emailMessage)).WithAnyArguments().MustHaveHappened();
-                return true;
-            }, 3000);
+            factory.AwaitAssert(() => A.CallTo(() => emailService.SendEmail(emailMessage)).WithAnyArguments().MustHaveHappened());
         }
 
         [TestMethod]
@@ -85,7 +81,7 @@ namespace AkkaDotNetTDD.Tests
             builder.Register(b => emailService);
             var container = builder.Build();
             var system = new ApplicationActorSystem();
-            system.Register(new AutoFacAkkaDependencyResolver(container));
+            system.RegisterAndCreateActorSystem(new AutoFacAkkaDependencyResolver(container));
             var factory = new TddTestKitfactoryFactory(container, system.ActorSystem);
 
             //Act
@@ -93,11 +89,7 @@ namespace AkkaDotNetTDD.Tests
             emailSenderCorordinatorActor.Tell("hello");
 
             //Assert
-            factory.AwaitAssert(() =>
-            {
-                A.CallTo(() => emailService.SendEmail(emailMessage)).WithAnyArguments().MustHaveHappened();
-                return true;
-            }, 3000);
+            factory.AwaitAssert(() => A.CallTo(() => emailService.SendEmail(emailMessage)).WithAnyArguments().MustHaveHappened());
         }
     }
 }

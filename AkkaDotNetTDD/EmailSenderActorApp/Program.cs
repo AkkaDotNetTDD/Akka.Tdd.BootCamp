@@ -24,7 +24,7 @@ namespace EmailSenderActorApp
             var container = builder.Build();
             var system = new ApplicationActorSystem();
           
-            system.Register(new AutoFacAkkaDependencyResolver(container));
+            system.RegisterAndCreateActorSystem(new AutoFacAkkaDependencyResolver(container));
            
             while (true)
             {
