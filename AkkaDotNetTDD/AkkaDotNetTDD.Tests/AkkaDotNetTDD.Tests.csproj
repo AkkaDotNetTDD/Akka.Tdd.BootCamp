@@ -60,7 +60,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.Tdd.AutoFac, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Akka.Tdd.AutoFac.0.0.4\lib\Akka.Tdd.AutoFac.dll</HintPath>
+      <HintPath>..\packages\Akka.Tdd.AutoFac.0.0.41\lib\Akka.Tdd.AutoFac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.Tdd.TestKit, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
