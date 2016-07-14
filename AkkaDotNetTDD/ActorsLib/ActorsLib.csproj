@@ -47,7 +47,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.Tdd, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Akka.Tdd.0.0.4\lib\Akka.Tdd.dll</HintPath>
+      <HintPath>..\packages\Akka.Tdd.0.0.8\lib\Akka.Tdd.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.ProtocolBuffers, Version=2.4.1.555, Culture=neutral, PublicKeyToken=55f7125234beb589, processorArchitecture=MSIL">
